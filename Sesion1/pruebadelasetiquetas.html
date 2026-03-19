@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservaciones - Restaurante El Sartén</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f9;
+      color: #333;
+    }
+    header {
+      background: linear-gradient(90deg, #229cffab, #8319e6);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    section {
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 1000px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 15px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #887e7e;
+    }
+    th {
+      background-color: #b120b1;
+      color: white;
+    }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    tr:hover { background-color: #ffb2f9; cursor: pointer; }
+    input, select {
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    input[type="submit"] {
+      background: #ff5722;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background: #e64a19;
+    }
+    .eliminar {
+      background-color: crimson;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .eliminar:hover { background-color: darkred; }
+    .editar {
+      background-color: steelblue;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .editar:hover { background-color: navy; }
+  </style>
+</head>
+<body>
+ 
+  <header>
+    <h1>Restaurante El Sartén</h1>
+    <p>Gestión moderna de reservaciones y clientes</p>
+  </header>
+
+  <section>
+    <h2>Buscar Reservación</h2>
+    <input type="text" id="buscador" placeholder="Buscar por nombre de cliente...">
+  </section>
+
+  <section>
+    <h2>Reservaciones</h2>
+    <table id="tablaReservaciones">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Cliente</th>
+          <th>Fecha y Hora</th>
+          <th>Personas</th>
+          <th>Mesa</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>001</td><td>Juan Pérez</td><td>20/03/2026 - 19:00</td><td>4</td><td>12</td><td>Reservada</td>
+          <td>
+            <button class="editar">Editar</button>
+            <button class="eliminar">Eliminar</button>
+          </td>
+        </tr>
+        <tr>
+          <td>002</td><td>María López</td><td>21/03/2026 - 20:30</td><td>2</td><td>5</td><td>Pendiente</td>
+          <td>
+            <button class="editar">Editar</button>
+            <button class="eliminar">Eliminar</button>
+          </td>
+        </tr>
+        <tr>
+          <td>003</td><td>Carlos Gómez</td><td>22/03/2026 - 18:00</td><td>6</td><td>8</td><td>Cancelada</td>
+          <td>
+            <button class="editar">Editar</button>
+            <button class="eliminar">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Agregar Nueva Reservación</h2>
+    <form id="formReservacion">
+      <input type="text" id="numero" placeholder="Número de reservación" required>
+      <input type="text" id="cliente" placeholder="Nombre del cliente" required>
+      <input type="datetime-local" id="fecha" required>
+      <input type="number" id="personas" placeholder="Número de personas" required>
+      <input type="number" id="mesa" placeholder="Número de mesa" required>
+      <select id="estado">
+        <option value="Reservada">Reservada</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Cancelada">Cancelada</option>
+      </select>
+      <input type="submit" value="Agregar">
+    </form>
+  </section>
+
+  <section>
+    <h2>Clientes Frecuentes</h2>
+    <form id="formFrecuentes">
+      <input type="text" id="nuevoCliente" placeholder="Nombre del cliente frecuente" required>
+      <input type="submit" value="Agregar Cliente Frecuente">
+    </form>
+    <ul id="listaFrecuentes">
+      <li>Ana Torres</li>
+      <li>José Martínez</li>
+      <li>Lucía Hernández</li>
+      <li>Pedro Ramírez</li>
+      <li>Laura Castillo</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Clientes VIP</h2>
+    <ul>
+      <li>Descuento del 20% en todas las reservaciones</li>
+      <li>Acceso preferente a mesas exclusivas</li>
+      <li>Invitaciones a eventos privados</li>
+      <li>Postre gratuito en cada visita</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Restaurante El Sartén - Todos los derechos reservados</p>
+  </footer>
+
+  <script>
+    // Buscador
+    document.getElementById("buscador").addEventListener("keyup", function() {
+      const filtro = this.value.toLowerCase();
+      const filas = document.querySelectorAll("#tablaReservaciones tbody tr");
+      filas.forEach(fila => {
+        const nombre = fila.cells[1].textContent.toLowerCase();
+        fila.style.display = nombre.includes(filtro) ? "" : "none";
+      });
+    });
+
+    // Agregar nueva reservación
+    const form = document.getElementById("formReservacion");
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+      const numero = document.getElementById("numero").value;
+      const cliente = document.getElementById("cliente").value;
+      const fecha = document.getElementById("fecha").value;
+      const personas = document.getElementById("personas").value;
+      const mesa = document.getElementById("mesa").value;
+      const estado = document.getElementById("estado").value;
+
+      const tabla = document.getElementById("tablaReservaciones").querySelector("tbody");
+      const nuevaFila = tabla.insertRow();
+      nuevaFila.innerHTML = `
+        <td>${numero}</td>
+        <td>${cliente}</td>
+        <td>${fecha}</td>
+        <td>${personas}</td>
+        <td>${mesa}</td>
+        <td>${estado}</td>
+        <td>
+          <button class="editar">Editar</button>
+          <button class="eliminar">Eliminar</button>
+        </td>
+      `;
+      form.reset();
+    });
+
+    // Editar y eliminar reservación
+    document.getElementById("tablaReservaciones").addEventListener("click", function(event) {
+      const fila = event.target.closest("tr");
+
+      // Eliminar
+      if (event.target.classList.contains("eliminar")) {
+        if (confirm("¿Seguro que deseas eliminar esta reservación?")) {
+          fila.remove();
+        }
+      }
+
+      // Editar
+      if (event.target.classList.contains("editar")) {
+        const numero = prompt("Editar número de reservación:", fila.cells[0].textContent);
+        const cliente = prompt("Editar nombre del cliente:", fila.cells[1].textContent);
+        const fecha = prompt("Editar fecha y hora:", fila.cells[2].textContent);
+        const personas = prompt("Editar número de personas:", fila.cells[3].textContent);
+        const mesa = prompt("Editar número de mesa:", fila.cells[4].textContent);
+        const estado = prompt("Editar estado:", fila.cells[5].textContent);
+      </script>
+
+      </body>
+      
+      </html>
